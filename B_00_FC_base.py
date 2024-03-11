@@ -4,19 +4,20 @@
 # **** Functions go here ****
 
 # Checks that input is either a float or an integer that is more than zero
-def num_check(question):
-
-    while True:
+def num_check(question, error, num_type):
+    valid = False
+    while not valid:
 
         try:
-            response = int and float(input(question))
+            response = num_type(input(question))
+
             if response <= 0:
-                print("Please enter a number that is more than 0\n")
-                continue
-            return response
+                print(error)
+            else:
+                return response
 
         except ValueError:
-            print("Please enter an integer\n")
+            print(error)
 
 
 # Checks that input is either yes or no (or shortened to y/n)
@@ -38,10 +39,8 @@ def yes_no(question):
             continue
 
 
-# Loop for testing
-while True:
+# Main routine goes here
+want_instructions = yes_no("Would you like to see the instructions? ")
 
-    number = num_check("Number: ")
-    print()
-
-    yes_or_no = yes_no("Yes or No? ")
+get_int = num_check("How many do you need ", "Please enter an integer more than 0\n", int)
+get_cost = num_check("How much does it cost $", "Please enter a number more than 0\n", float)
