@@ -1,4 +1,5 @@
 # Import libraries
+import pandas
 
 
 # **** Functions go here ****
@@ -42,5 +43,5 @@ def yes_no(question):
 # Main routine goes here
 want_instructions = yes_no("Would you like to see the instructions? ")
 
-get_int = num_check("How many do you need ", "Please enter an integer more than 0\n", int)
-get_cost = num_check("How much does it cost $", "Please enter a number more than 0\n", float)
+get_int = num_check("How many do you need? ", "Please enter an amount more than 0\n", int)
+get_cost = num_check("How much does it cost for each one? $", "Please enter a real price\n", float)
