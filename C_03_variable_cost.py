@@ -91,4 +91,4 @@ print(variable_frame)
 
 print()
 
-print("Variable Cost: ${:.2f".format(variable_sub))
+print("Variable Cost: ${:.2f}".format(variable_sub))
