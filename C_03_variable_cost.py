@@ -17,30 +17,78 @@ def num_check(question, error, num_type):
             print(error)
 
 
-def name_input(question):
+def not_blank(question, error):
 
-    while True:
-
-        response = input(question).strip()
+    valid = False
+    while not valid:
+        response = input(question)
 
         if response == "":
-            print("Please enter a name\n")
-        else:
-            return response
+            print("{}  \nTry again\n".format(error))
+            continue
+
+        return response
 
 
-while True:
-    item_name = name_input("What is the name of your item? ")
-    print("Item name: {}\n".format(item_name))
+def currency(x):
+    return "${:.2f}".format(x)
 
-    component_name = name_input("What is the name of your component? ")
-    print("The name of your component is {}\n".format(component_name))
 
-    how_many = num_check("How many do you need? ", "Please enter an amount more than 0\n", int)
-    print("You are making {} {}\n".format(how_many, component_name))
+# *** Main routine starts here ***
 
-    component_cost = num_check("What is the cost of your component? $", "Please enter a real price\n", float)
-    print("Your component ({}) costs ${:.2f}\n".format(component_name, component_cost))
+# Set up dictionaries and lists
 
-    component_subtotal = component_cost * how_many
-    print("The subtotal of your component ({}) is ${:.2f}\n".format(component_name, component_subtotal))
+item_list = []
+quantity_list = []
+price_list = []
+
+variable_dict = {
+    "Item": item_list,
+    "Quantity": quantity_list,
+    "Price": price_list
+}
+
+# Get user data
+product_name = not_blank("Product name: ", "Please enter a name for your product")
+
+
+# loop to get component, quantity and price
+item_name = ""
+while item_name.lower() != "xxx":
+
+    print()
+    # get name, quantity and price
+    item_name = not_blank("Item name: ", "Please enter a name for the component")
+    if item_name.lower() == "xxx":
+        break
+
+    quantity = num_check("Quantity: ", "Please enter an amount more than 0", int)
+
+    price = num_check("How much for 1? $", "Please enter a real cost", float)
+
+    # add item, quantity and price to lists
+    item_list.append(item_name)
+    quantity_list.append(quantity)
+    price_list.append(price)
+
+variable_frame = pandas.DataFrame(variable_dict)
+variable_frame = variable_frame.set_index('Item')
+
+# Calculate cost of each component
+variable_frame['Cost'] = variable_frame['Quantity'] * variable_frame['Price']
+
+# Find subtotal
+variable_sub = variable_frame['Cost'].sum()
+
+# Currency Formatting (uses currency function)
+add_dollars = ['Price', 'Cost']
+for item in add_dollars:
+    variable_frame[item] = variable_frame[item].apply(currency)
+
+# *** Printing Area ****
+
+print(variable_frame)
+
+print()
+
+print("Variable Cost: ${:.2f".format(variable_sub))
