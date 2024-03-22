@@ -90,7 +90,7 @@ product_name = not_blank("Product name: ", "Please enter a name for your product
 
 variable_expenses = get_expenses("variable")
 variable_frame = variable_expenses[0]
-variable_sub = variable_expenses [1]
+variable_sub = variable_expenses[1]
 
 # *** Printing Area ****
 

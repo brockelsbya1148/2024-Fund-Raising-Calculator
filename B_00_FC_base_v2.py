@@ -125,34 +125,35 @@ want_instructions = yes_no("Would you like to see the instructions? ")
 # get_int = num_check("How many do you need? ", "Please enter an amount more than 0\n", int)
 # get_cost = num_check("How much does it cost for each one? $", "Please enter a real price\n", float)
 
-fixed_or_no = yes_no("Do you have any fixed costs? ")
-
 # Get product name
 product_name = not_blank("Product name: ", "Please enter a name for your product")
 
-# *** Printing Area ****
+# get variable expenses
+variable_expenses = get_expenses("variable")
+variable_frame = variable_expenses[0]
+variable_sub = variable_expenses[1]
 
+fixed_or_no = yes_no("Do you have any fixed costs? ")
+
+# Get fixed expenses if necessary
 if fixed_or_no == "yes":
     fixed_expenses = get_expenses("fixed")
     fixed_frame = fixed_expenses[0]
     fixed_sub = fixed_expenses[1]
 
-    variable_expenses = get_expenses("variable")
-    variable_frame = variable_expenses[0]
-    variable_sub = variable_expenses[1]
+else:
+    fixed_frame = ""
+    fixed_sub = 0
 
+
+# Printing area
+
+print(variable_frame)
+print("\nVariable Costs: ${:.2f}".format(variable_sub))
+overall_cost = variable_sub + fixed_sub
+
+if fixed_or_no == "yes":
     print("\n", fixed_frame[['Cost']])
     print("\nFixed Costs: ${:.2f}\n".format(fixed_sub))
 
-    print(variable_frame)
-    print("\nVariable Costs: ${:.2f}".format(variable_sub))
-    overall_cost = variable_sub + fixed_sub
-    print("\nOverall Costs: ${:.2f}".format(overall_cost))
-
-else:
-    variable_expenses = get_expenses("variable")
-    variable_frame = variable_expenses[0]
-    variable_sub = variable_expenses[1]
-
-    print("\n", variable_frame, "\n")
-    print("Costs: ${:.2f}\n".format(variable_sub))
+print("\nOverall Costs: ${:.2f}".format(overall_cost))

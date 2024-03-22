@@ -1,10 +1,6 @@
-# Import libraries
 import pandas
 
 
-# **** Functions go here ****
-
-# Checks that input is either a float or an integer that is more than zero
 def num_check(question, error, num_type):
     valid = False
     while not valid:
@@ -21,26 +17,6 @@ def num_check(question, error, num_type):
             print(error)
 
 
-# Checks that input is either yes or no (or shortened to y/n)
-def yes_no(question):
-
-    while True:
-        response = input(question).lower()
-
-        if response == "yes" or response == "y":
-            print("You said yes\n")
-            return "yes"
-
-        elif response == "no" or response == "n":
-            print("You said no\n")
-            return "no"
-
-        else:
-            print("Please answer yes or no\n")
-            continue
-
-
-# Checks that string response is not blank
 def not_blank(question, error):
 
     valid = False
@@ -80,11 +56,7 @@ def get_expenses(var_fixed):
 
         print()
         # get name, quantity and price
-        if var_fixed == "variable":
-            item_name = not_blank("Name of Variable Cost: ", "Please enter a name for the component")
-        else:
-            item_name = not_blank("Name of Fixed Cost: ", "Please enter a name for the component")
-
+        item_name = not_blank("Item name: ", "Please enter a name for the component")
         if item_name.lower() == "xxx":
             break
 
@@ -120,39 +92,31 @@ def get_expenses(var_fixed):
 
 # *** Main routine starts here ***
 
-want_instructions = yes_no("Would you like to see the instructions? ")
-
-# get_int = num_check("How many do you need? ", "Please enter an amount more than 0\n", int)
-# get_cost = num_check("How much does it cost for each one? $", "Please enter a real price\n", float)
-
-fixed_or_no = yes_no("Do you have any fixed costs? ")
-
 # Get product name
 product_name = not_blank("Product name: ", "Please enter a name for your product")
 
+fixed_expenses = get_expenses("fixed")
+fixed_frame = fixed_expenses[0]
+fixed_sub = fixed_expenses[1]
+
 # *** Printing Area ****
 
-if fixed_or_no == "yes":
-    fixed_expenses = get_expenses("fixed")
-    fixed_frame = fixed_expenses[0]
-    fixed_sub = fixed_expenses[1]
+print()
+print(fixed_frame[['Cost']])
+print()
 
-    variable_expenses = get_expenses("variable")
-    variable_frame = variable_expenses[0]
-    variable_sub = variable_expenses[1]
+print("Fixed Costs: ${:.2f}".format(fixed_sub))
 
-    print("\n", fixed_frame[['Cost']])
-    print("\nFixed Costs: ${:.2f}\n".format(fixed_sub))
+variable_expenses = get_expenses("variable")
+variable_frame = variable_expenses[0]
+variable_sub = variable_expenses[1]
 
-    print(variable_frame)
-    print("\nVariable Costs: ${:.2f}".format(variable_sub))
-    overall_cost = variable_sub + fixed_sub
-    print("\nOverall Costs: ${:.2f}".format(overall_cost))
+print()
+print(variable_frame)
+print()
 
-else:
-    variable_expenses = get_expenses("variable")
-    variable_frame = variable_expenses[0]
-    variable_sub = variable_expenses[1]
+print("Variable Costs: ${:.2f}".format(variable_sub))
+print()
 
-    print("\n", variable_frame, "\n")
-    print("Costs: ${:.2f}\n".format(variable_sub))
+overall_cost = variable_sub + fixed_sub
+print("Overall Costs: ${:.2f}".format(overall_cost))
