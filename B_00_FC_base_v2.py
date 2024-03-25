@@ -28,11 +28,9 @@ def yes_no(question):
         response = input(question).lower()
 
         if response == "yes" or response == "y":
-            print("You said yes\n")
             return "yes"
 
         elif response == "no" or response == "n":
-            print("You said no\n")
             return "no"
 
         else:
@@ -57,6 +55,31 @@ def not_blank(question, error):
 # currency formatting function
 def currency(x):
     return "${:.2f}".format(x)
+
+
+# Puts series of symbols at start and end of text (for emphasis)
+def statement_generator(text, decoration):
+
+    # Make string with five characters
+    ends = decoration * 5
+
+    # Add decoration to start and end of statement
+    statement = "{}  {}  {}".format(ends, text, ends)
+
+    print()
+    print(statement)
+    print()
+
+    return ""
+
+
+# Displays instructions / information
+def instructions():
+
+    statement_generator("Instructions", "=")
+    print("Instructions go here\n")
+
+    return ""
 
 
 # Gets expenses, returns list which has
@@ -122,16 +145,13 @@ def get_expenses(var_fixed):
 
 want_instructions = yes_no("Would you like to see the instructions? ")
 
-# get_int = num_check("How many do you need? ", "Please enter an amount more than 0\n", int)
-# get_cost = num_check("How much does it cost for each one? $", "Please enter a real price\n", float)
+if want_instructions == "yes":
+    instructions()
+else:
+    pass
 
 # Get product name
 product_name = not_blank("Product name: ", "Please enter a name for your product")
-
-# get variable expenses
-variable_expenses = get_expenses("variable")
-variable_frame = variable_expenses[0]
-variable_sub = variable_expenses[1]
 
 fixed_or_no = yes_no("Do you have any fixed costs? ")
 
@@ -145,15 +165,21 @@ else:
     fixed_frame = ""
     fixed_sub = 0
 
+# get variable expenses
+variable_expenses = get_expenses("variable")
+variable_frame = variable_expenses[0]
+variable_sub = variable_expenses[1]
+
 
 # Printing area
-
+statement_generator("Variable Costs", "-")
 print(variable_frame)
 print("\nVariable Costs: ${:.2f}".format(variable_sub))
 overall_cost = variable_sub + fixed_sub
 
 if fixed_or_no == "yes":
-    print("\n", fixed_frame[['Cost']])
-    print("\nFixed Costs: ${:.2f}\n".format(fixed_sub))
+    statement_generator("Fixed Costs", "-")
+    print(fixed_frame[['Cost']])
+    print("\nFixed Costs: ${:.2f}".format(fixed_sub))
 
 print("\nOverall Costs: ${:.2f}".format(overall_cost))
