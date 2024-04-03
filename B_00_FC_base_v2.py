@@ -182,4 +182,4 @@ if fixed_or_no == "yes":
     print(fixed_frame[['Cost']])
     print("\nFixed Costs: ${:.2f}".format(fixed_sub))
 
-print("\nOverall Costs: ${:.2f}".format(overall_cost))
+print("\nOverall Costs: ${:.2f}\n".format(overall_cost))

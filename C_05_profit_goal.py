@@ -36,18 +36,42 @@ def profit_goal(total_costs):
             amount = response[:-1]
 
         else:
-            if response <= 100:
-                percent_or_dollar = yes_no("Did you mean {}%? ")
-                if percent_or_dollar == "yes":
-                    profit_type = "%"
-                else:
-                    profit_type = "$"
+            profit_type = "unknown"
+            amount = response
+
+        try:
+            amount = float(amount)
+            if amount <= 0:
+                print(error)
+                continue
+
+        except ValueError:
+            print(error)
+            continue
+
+        if profit_type == "unknown" and amount >= 100:
+            dollar_type = yes_no("Do you mean ${:.2f} ie {:.2f} dollars? ".format(amount, amount))
+
+            # Set profit type based on user answer above
+            if dollar_type == "yes":
+                profit_type = "$"
             else:
-                percent_or_dollar = yes_no("Did you mean ${:.2f}? ")
-                if percent_or_dollar == "yes":
-                    profit_type = "$"
-                else:
-                    profit_type = "%"
+                profit_type = "%"
+
+        elif profit_type == "unknown" and amount < 100:
+            percent_type = yes_no("Do you mean {}%? ".format(amount))
+
+            if percent_type == "yes":
+                profit_type = "%"
+            else:
+                profit_type = "$"
+
+        # return profit goal to main routine
+        if profit_type == "$":
+            return amount
+        else:
+            goal = (amount / 100) * total_costs
+            return goal
 
 
 # Main Routine goes here
