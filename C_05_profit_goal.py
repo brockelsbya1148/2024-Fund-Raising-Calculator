@@ -50,7 +50,7 @@ def profit_goal(total_costs):
             continue
 
         if profit_type == "unknown" and amount >= 100:
-            dollar_type = yes_no("Do you mean ${:.2f} ie {:.2f} dollars? ".format(amount, amount))
+            dollar_type = yes_no("Do you mean ${:.2f}? ".format(amount, amount))
 
             # Set profit type based on user answer above
             if dollar_type == "yes":

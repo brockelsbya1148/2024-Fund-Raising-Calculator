@@ -141,6 +141,62 @@ def get_expenses(var_fixed):
     return [expense_frame, sub_total]
 
 
+def profit_goal(total_costs):
+
+    error = "Please enter a valid profit goal\n"
+
+    valid = False
+    while not valid:
+
+        response = input("What is your profit goal? (eg $500 or 50%) ")
+
+        if response[0] == "$":
+            profit_type = "$"
+            amount = response[1:]
+
+        elif response[-1] == "%":
+            profit_type = "%"
+            amount = response[:-1]
+
+        else:
+            profit_type = "unknown"
+            amount = response
+
+        try:
+            amount = float(amount)
+            if amount <= 0:
+                print(error)
+                continue
+
+        except ValueError:
+            print(error)
+            continue
+
+        if profit_type == "unknown" and amount >= 100:
+            dollar_type = yes_no("Do you mean ${:.2f}? ".format(amount, amount))
+
+            # Set profit type based on user answer above
+            if dollar_type == "yes":
+                profit_type = "$"
+            else:
+                profit_type = "%"
+
+        elif profit_type == "unknown" and amount < 100:
+            percent_type = yes_no("Do you mean {}%? ".format(amount))
+
+            if percent_type == "yes":
+                profit_type = "%"
+            else:
+                profit_type = "$"
+
+        # return profit goal to main routine
+        if profit_type == "$":
+            return amount
+        else:
+            goal = (amount / 100) * total_costs
+            return goal
+
+
 # *** Main routine starts here ***
 
 want_instructions = yes_no("Would you like to see the instructions? ")
@@ -170,16 +226,29 @@ variable_expenses = get_expenses("variable")
 variable_frame = variable_expenses[0]
 variable_sub = variable_expenses[1]
 
+# work out total costs and profit target
+overall_cost = variable_sub + fixed_sub
+profit_target = profit_goal(overall_cost)
+
+selling_price = 0
 
 # Printing area
-statement_generator("Variable Costs", "-")
+statement_generator("Fund Raising - {}".format(product_name), "*")
+
+print("-- Variable Costs --\n")
 print(variable_frame)
-print("\nVariable Costs: ${:.2f}".format(variable_sub))
-overall_cost = variable_sub + fixed_sub
+print("\nVariable Costs: ${:.2f}\n".format(variable_sub))
+
 
 if fixed_or_no == "yes":
-    statement_generator("Fixed Costs", "-")
+    print("-- Fixed Costs --\n")
     print(fixed_frame[['Cost']])
     print("\nFixed Costs: ${:.2f}".format(fixed_sub))
 
-print("\nOverall Costs: ${:.2f}\n".format(overall_cost))
+print("\n**** Overall Costs: ${:.2f} ****".format(overall_cost))
+
+statement_generator("Profit & Sales Targets", "-")
+print("Profit Target: ${:.2f}".format(profit_target))
+print("Total Sales: ${:.2f}".format(overall_cost + profit_target))
+
+statement_generator("Recommended Selling Price: ${:.2f}".format(selling_price), "*")
