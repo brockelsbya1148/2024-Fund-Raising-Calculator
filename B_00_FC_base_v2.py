@@ -1,5 +1,6 @@
 # Import libraries
 import pandas
+import math
 
 
 # **** Functions go here ****
@@ -197,6 +198,11 @@ def profit_goal(total_costs):
             return goal
 
 
+# rounding function
+def round_up(amount, var_round_to):
+    return int(math.ceil(amount / var_round_to)) * var_round_to
+
+
 # *** Main routine starts here ***
 
 want_instructions = yes_no("Would you like to see the instructions? ")
@@ -208,6 +214,7 @@ else:
 
 # Get product name
 product_name = not_blank("Product name: ", "Please enter a name for your product")
+how_many = num_check("How many of these will you be making? ", "Must be a whole number more than 0", int)
 
 fixed_or_no = yes_no("Do you have any fixed costs? ")
 
@@ -230,7 +237,15 @@ variable_sub = variable_expenses[1]
 overall_cost = variable_sub + fixed_sub
 profit_target = profit_goal(overall_cost)
 
-selling_price = 0
+# calculate total sales needed
+sales_needed = overall_cost + profit_target
+
+# ask user for rounding
+round_to = num_check("Round to nearest...? $", "More than 0", int)
+
+# calculate recommended price
+selling_price = sales_needed / how_many
+rounded = round_up(selling_price, round_to)
 
 # Printing area
 statement_generator("Fund Raising - {}".format(product_name), "*")
@@ -251,4 +266,6 @@ statement_generator("Profit & Sales Targets", "-")
 print("Profit Target: ${:.2f}".format(profit_target))
 print("Total Sales: ${:.2f}".format(overall_cost + profit_target))
 
-statement_generator("Recommended Selling Price: ${:.2f}".format(selling_price), "*")
+statement_generator("Pricing", "*")
+print("Minimum Price: ${:.2f}".format(selling_price))
+print("Recommended Price: ${:.2f}".format(rounded))
