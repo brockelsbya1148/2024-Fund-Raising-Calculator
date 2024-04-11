@@ -47,7 +47,7 @@ def not_blank(question, error):
         response = input(question)
 
         if response == "":
-            print("{}  \nTry again\n".format(error))
+            print(f"{error}  \nTry again\n")
             continue
 
         return response
@@ -55,7 +55,7 @@ def not_blank(question, error):
 
 # currency formatting function
 def currency(x):
-    return "${:.2f}".format(x)
+    return f"${x:.2f}"
 
 
 # Puts series of symbols at start and end of text (for emphasis)
@@ -65,11 +65,10 @@ def statement_generator(text, decoration):
     ends = decoration * 5
 
     # Add decoration to start and end of statement
-    statement = "{}  {}  {}".format(ends, text, ends)
+    statement = f"{ends}  {text}  {ends}"
 
     print()
     print(statement)
-    print()
 
     return ""
 
@@ -78,6 +77,7 @@ def statement_generator(text, decoration):
 def instructions():
 
     statement_generator("Instructions", "=")
+    print()
     print("Instructions go here\n")
 
     return ""
@@ -174,7 +174,7 @@ def profit_goal(total_costs):
             continue
 
         if profit_type == "unknown" and amount >= 100:
-            dollar_type = yes_no("Do you mean ${:.2f}? ".format(amount, amount))
+            dollar_type = yes_no(f"Do you mean ${amount:.2f}? ")
 
             # Set profit type based on user answer above
             if dollar_type == "yes":
@@ -183,7 +183,7 @@ def profit_goal(total_costs):
                 profit_type = "%"
 
         elif profit_type == "unknown" and amount < 100:
-            percent_type = yes_no("Do you mean {}%? ".format(amount))
+            percent_type = yes_no(f"Do you mean {amount}%? ")
 
             if percent_type == "yes":
                 profit_type = "%"
@@ -248,24 +248,25 @@ selling_price = sales_needed / how_many
 rounded = round_up(selling_price, round_to)
 
 # Printing area
-statement_generator("Fund Raising - {}".format(product_name), "*")
+statement_generator(f"Fund Raising - {product_name}", "*")
+print()
 
 print("-- Variable Costs --\n")
 print(variable_frame)
-print("\nVariable Costs: ${:.2f}\n".format(variable_sub))
+print(f"\nVariable Costs: ${variable_sub:.2f}\n")
 
 
 if fixed_or_no == "yes":
     print("-- Fixed Costs --\n")
     print(fixed_frame[['Cost']])
-    print("\nFixed Costs: ${:.2f}".format(fixed_sub))
+    print(f"\nFixed Costs: ${fixed_sub:.2f}\n")
 
-print("\n**** Overall Costs: ${:.2f} ****".format(overall_cost))
+print(f"**** Overall Costs: ${overall_cost:.2f} ****")
 
 statement_generator("Profit & Sales Targets", "-")
-print("Profit Target: ${:.2f}".format(profit_target))
-print("Total Sales: ${:.2f}".format(overall_cost + profit_target))
+print(f"Profit Target: ${profit_target:.2f}")
+print(f"Total Sales: ${overall_cost + profit_target:.2f}")
 
 statement_generator("Pricing", "*")
-print("Minimum Price: ${:.2f}".format(selling_price))
-print("Recommended Price: ${:.2f}".format(rounded))
+print(f"Minimum Price: ${selling_price:.2f}")
+print(f"Recommended Price: ${rounded:.2f}")
